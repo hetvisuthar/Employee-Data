@@ -1,0 +1,173 @@
+{%block content%} {% load static %}
+<!doctype html>
+<html>
+<head>
+  <title>Employee List</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+</head>
+<body>
+
+    
+    <div  style="background-image: linear-gradient(rgb(75, 131, 196), white);" action="" class="jumbotron text-center" style="height:8%">
+      <h2 style="color: black">Web Application</h2>
+    </div>
+
+    <div class="container">
+      <h3>Choices</h3>
+      <button type="submit" class="btn btn-info" style="margin-top:2%;width: 45%"  data-toggle="modal" data-target="#myModal">Add Employee</button>
+      <button type="button" class="btn btn-info" name="delete" style="margin-top:2%;width: 45%;;margin-left: 9%"  data-toggle="modal" data-target="#myModal2">Delete Employee</button>
+      <input  class="form-control" type="text" style="margin-top:2%" id="myInput" onkeyup="myFunction()" placeholder="Search Employee.." title="Type employee name or designation or phone num">
+      
+      
+        <h3  style="margin-top:3%">Employees Table</h3>
+        <table class="table"  id="myTable" style="margin-top:2%">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Designation</th>
+              <th>Address</th>
+              <th>Phone</th>
+            </tr>
+          </thead>
+          {%for emp in emp_Det%}
+          
+          <tbody id="myTable" class="table">
+            <tr>
+              <td>{{emp.employee_ID}}</td>
+              <td>{{emp.employee_name}}</td>
+              <td>{{emp.designation}}</td>
+              <td>{{emp.address}}</td>
+              <td>{{emp.phone_num}}</td>
+            </tr>
+          </tbody>
+          {%endfor%}
+        </table>
+    </div>
+
+    <div class="modal" id="myModal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+        
+          <div class="modal-header" style="margin-top: 100px;">
+            <h4 class="modal-title">Enter Employee Details</h4>
+          </div>
+          
+          <!-- Modal body -->
+          <form action="add" method="POST">
+          <div class="modal-body">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <div class="form-group" style="margin-left:2%;width:93%" >
+            
+              {% csrf_token %}
+              <label >Employee ID:</label>
+              <input class="form-control" style="margin-top:2%;margin-bottom:3%;" id="employee_ID" placeholder="Enter ID" maxlength="10" title="Integer Format" name="employee_ID" required>
+              <label >Employee Name:</label>
+              <input class="form-control" style="margin-top:2%;margin-bottom:3%;" id="employee_name" placeholder="Enter name" maxlength="50" name="employee_name" required>
+              <label >Designation:</label>
+              <input class="form-control" style="margin-top:2%;margin-bottom:3%;" id="designation" placeholder="Enter designation" maxlength="50" name="designation" required>
+              <label >Address:</label>
+              <input class="form-control" style="margin-top:2%;margin-bottom:3%;" id="address" placeholder="Enter address" name="address" maxlength="100" required>
+              <label >Phone:</label>  
+              <input class="form-control" style="margin-top:2%;margin-bottom:3%;" id="phone_num" placeholder="Enter phone"  title="Format : 7265914890" pattern="[0-9]{10}"  name="phone_num" maxlength="10" required>
+            </div>
+          </div>
+          
+          <!-- Modal footer -->
+          <div class="modal-footer">
+            <button type="submit" id="submit" name="submit" class="btn btn-danger" >Submit</button>
+          </div>
+        </form>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="modal" id="myModal2">
+      <div class="modal-dialog">
+        <div class="modal-content">
+        
+          <div class="modal-header">
+            <h4 class="modal-title">Delete Employee Details</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          
+          <!-- Modal body -->
+          <form  action="delete" method="POST">
+          <div class="modal-body">
+            <div class="form-group" style="margin-left:2%;width:93%" >
+            
+              {% csrf_token %}
+              <label >Employee ID:</label>
+              <input class="form-control" style="margin-top:2%;margin-bottom:3%;" id="ID" placeholder="Enter ID" name="ID" required>
+            </div>
+            {% comment %} <form action="delete" method="POST">
+              {%csrf_token%} {% endcomment %}
+              <button class="btn btn-danger" name="data_delete" style="margin-left:83%" type="submit" id="myBtn">Delete</button>
+            <!--</form>-->
+          </div>
+         
+        </form>
+        </div>
+      </div>
+    </div>
+
+ 
+    
+<script>
+  function myFunction() {
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("myInput");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("myTable");
+    tr = table.getElementsByTagName("tr");
+    for (i = 0; i < tr.length; i++) 
+    {
+      td = tr[i].getElementsByTagName("td")[1];
+      if (td) 
+      {
+        txtValue = td.textContent || td.innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
+        }
+      }        
+    }
+  }
+
+  function myFunction() {
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("myInput");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("myTable");
+    tr = table.getElementsByTagName("tr");
+    for (i = 0; i < tr.length; i++) 
+  {
+    td = tr[i].getElementsByTagName("td")[1];
+    td2 = tr[i].getElementsByTagName("td")[2];
+    td3 = tr[i].getElementsByTagName("td")[4];
+    if (td || td2 || td3) {
+      txtValue = td.textContent || td.innerText;
+      txtValue2 = td2.textContent || td2.innerText;
+      txtValue3 = td3.textContent || td3.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1 || txtValue2.toUpperCase().indexOf(filter) > -1 || txtValue3.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    } 
+  }
+  }
+  </script>
+  
+
+</body>
+</html>
+{%endblock%}
